@@ -1,6 +1,7 @@
 const gulp = require('gulp')
 const gutil = require('gulp-util')
 const uglify = require('gulp-uglify')
+const sass = require('gulp-sass')
 const browserify = require('gulp-browserify')
 const browserSync = require('browser-sync')
 const less = require('gulp-less')
@@ -17,8 +18,8 @@ function handleError(err, self) {
 
 // Handle transpiling Node.js code to browser compatible code that's been minified
 gulp.task('js', function () {
-  let isErr = false
-  return gulp.src('src/js/*.js')
+  let isErr = false // If true, flags execution to end with 'NoOp'
+  return gulp.src('src/**/*.js')
     .pipe(browserify())
     .on('error', function (err) { 
       handleError(err, this)
@@ -31,14 +32,27 @@ gulp.task('js', function () {
     })
     // we check if  isErr - if true something went wrong and we do a no-op
     // instead of trying to pipe files that are likely undefined due to errors anyways
-    .pipe(isErr ? gutil.noop() : gulp.dest('site/scripts'))
+    .pipe(isErr ? gutil.noop() : gulp.dest('site/src'))
+
+})
+
+gulp.task('sass', function() {
+  console.log('Building SASS!')
+  let isErr = false // If true, flags execution to end with 'NoOp'
+  return gulp.src('src/sass/**/*.scss')
+    .pipe(sass())
+    .on('error', function(err) {
+      handleError(err, this)
+      isErr = true
+    })
+    .pipe( isErr ? gutil.noop() : gulp.dest('./site/css')) 
 
 })
 
 // transpile CSS Less to classic CSS 
 gulp.task('less', function () {
   console.log('Doing less!')
-  let isErr = false
+  let isErr = false // If true, flags execution to end with 'NoOp'
   return gulp.src('src/less/**/*.less')
     .pipe(less({
       paths: [path.join(__dirname, 'less', 'includes')]
@@ -67,7 +81,8 @@ gulp.task('default', ['js'], function () {
   })
 
     // watch js files for changes
-  gulp.watch([`src/js/*.js`], ['js'])
-  gulp.watch(['src/less/*.less'], ['less', 'reload'])
-  gulp.watch([`site/**/*.*`], ['reload'])
+  gulp.watch(['src/js/*.js'], ['js'])
+  gulp.watch(['src/less/**/*.less'], ['less'])
+  gulp.watch(['src/sass/**/*.scss'], ['sass'])
+  gulp.watch(['site/**/*.*'], ['reload'])
 })
