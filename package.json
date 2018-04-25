@@ -1,18 +1,19 @@
 {
-  "name": "cagd",
+  "name": "test-drawing",
   "version": "1.0.0",
   "description": "",
   "main": "./src/js/index.js",
   "scripts": {
-    "test": "gulp"
+    "build-sync": "gulp"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.18.12",
-    "gulp": "^3.9.1",
-    "gulp-browserify": "^0.5.1",
-    "gulp-less": "^3.3.2",
-    "gulp-uglify": "^3.0.0"
+    "browser-sync": "2.23.7",
+    "gulp": "3.9.1",
+    "gulp-browserify": "0.5.1",
+    "gulp-less": "4.0.0",
+    "gulp-sass": "4.0.1",
+    "gulp-uglify": "3.0.0"
   }
 }
